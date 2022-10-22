@@ -41,6 +41,9 @@ function addMessage(e: KeyboardEvent) {
   padding: 20px
 
 .messages
+  display: flex
+  flex-flow: column
+  align-items: flex-start
   height: calc(100vh - 120px)
 
 .message
@@ -48,6 +51,8 @@ function addMessage(e: KeyboardEvent) {
   border-radius: 3px
   border: 1px solid rgba(blue, .1)
   background: rgba(blue, .05)
+  &:not(:last-child)
+    margin-bottom: 10px
 
 .message-input
   width: 100%
