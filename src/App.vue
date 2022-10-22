@@ -1,79 +1,55 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { ref, reactive } from 'vue'
+
+const message = ref('')
+
+const messages: { timeCreate: Date, message: string }[] = reactive([])
+
+function addMessage(e: KeyboardEvent) {
+  e.preventDefault()
+  messages.push({ timeCreate: new Date, message: message.value.trim() })
+  message.value = ''
+}
 </script>
 
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <div class="main-page">
+    <div class="messages">
+      <div
+        v-for="message in messages"
+        :key="message.timeCreate"
+        class="message"
+      >
+        <i>
+          {{ message.timeCreate.toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}:
+        </i>
+        {{ message.message }}
+      </div>
     </div>
-  </header>
-
-  <RouterView />
+    <textarea
+      v-model="message"
+      class="message-input"
+      @keypress.enter="addMessage($event)"
+    ></textarea>
+  </div>
 </template>
 
 <style scoped lang="sass">
-header
-  line-height: 1.5
-  max-height: 100vh
+.main-page
+  display: flex
+  flex-flow: column
+  padding: 20px
 
-.logo
-  display: block
-  margin: 0 auto 2rem
+.messages
+  height: calc(100vh - 120px)
 
-nav
+.message
+  padding: 10px
+  border-radius: 3px
+  border: 1px solid rgba(blue, .1)
+  background: rgba(blue, .05)
+
+.message-input
   width: 100%
-  font-size: 12px
-  text-align: center
-  margin-top: 2rem
-
-nav a.router-link-exact-active
-  color: var(--color-text)
-
-nav a.router-link-exact-active:hover
-  background-color: transparent
-
-nav a
-  display: inline-block
-  padding: 0 1rem
-  border-left: 1px solid var(--color-border)
-
-nav a:first-of-type
-  border: 0
-
-@media (min-width: 1024px)
-  header
-    display: flex
-    place-items: center
-    padding-right: calc(var(--section-gap) / 2)
-
-  .logo
-    margin: 0 2rem 0 0
-
-  header .wrapper
-    display: flex
-    place-items: flex-start
-    flex-wrap: wrap
-
-  nav
-    text-align: left
-    margin-left: -1rem
-    font-size: 1rem
-
-    padding: 1rem 0
-    margin-top: 1rem
+  height: 80px
 </style>
